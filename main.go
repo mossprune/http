@@ -1,9 +1,8 @@
 package main
 
 import (
-	"errors"
+	"bufio"
 	"fmt"
-	"io"
 	"log"
 	"os"
 )
@@ -16,20 +15,15 @@ func main() {
 	}
 	defer file.Close()
 
-	buff := make([]byte, 8)
+	scan := bufio.NewScanner(file)
 
-	for {
-		readFile, err := file.Read(buff)
-		if readFile > 0 {
-			fmt.Println(string(buff[:readFile]))
-		}
+	for scan.Scan() {
+		line := scan.Text()
+		fmt.Println(line)
 
-		if err != nil {
-			if errors.Is(err, io.EOF) {
-				break
-			}
-			fmt.Println("Error Reading :(")
-		}
+	}
+	if err := scan.Err(); err != nil {
+		log.Fatal("err")
 	}
 
 }
