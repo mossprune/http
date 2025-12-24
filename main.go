@@ -1,11 +1,11 @@
 package main
 
 import (
-	"errors"
 	"fmt"
 	"io"
 	"log"
 	"os"
+	"strings"
 )
 
 func main() {
@@ -16,20 +16,28 @@ func main() {
 	}
 	defer file.Close()
 
-	buff := make([]byte, 8)
+	buf := make([]byte, 8)
+	currentLine := ""
 
 	for {
-		readFile, err := file.Read(buff)
-		if readFile > 0 {
-			fmt.Println(string(buff[:readFile]))
-		}
-
+		n, err := file.Read(buf)
 		if err != nil {
-			if errors.Is(err, io.EOF) {
+			if err == io.EOF {
 				break
 			}
-			fmt.Println("Error Reading :(")
+			log.Fatal()
 		}
-	}
 
+		chunks := string(buf[:n])
+		parts := strings.Split(chunks, "\n")
+
+		for i := 0; i < len(parts)-1; i++ {
+			fmt.Printf("read: %s\n", currentLine+parts[i])
+			currentLine = ""
+		}
+		currentLine += parts[len(parts)-1]
+	}
+	if currentLine != "" {
+		fmt.Printf("read: %s\n", currentLine)
+	}
 }
