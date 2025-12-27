@@ -1,8 +1,11 @@
 package main
 
 import (
+<<<<<<< HEAD
+=======
+	"bufio"
+>>>>>>> 6fc3d783bce466975b9d0c02eb9e71552a6d047c
 	"fmt"
-	"io"
 	"log"
 	"os"
 	"strings"
@@ -16,6 +19,7 @@ func main() {
 	}
 	defer file.Close()
 
+<<<<<<< HEAD
 	buf := make([]byte, 8)
 	currentLine := ""
 
@@ -27,6 +31,18 @@ func main() {
 			}
 			log.Fatal()
 		}
+=======
+	scan := bufio.NewScanner(file)
+
+	for scan.Scan() {
+		line := scan.Text()
+		fmt.Println(line)
+
+	}
+	if err := scan.Err(); err != nil {
+		log.Fatal("err")
+	}
+>>>>>>> 6fc3d783bce466975b9d0c02eb9e71552a6d047c
 
 		chunks := string(buf[:n])
 		parts := strings.Split(chunks, "\n")
